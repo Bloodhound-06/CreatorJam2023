@@ -4,79 +4,35 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    [Header("Float")]
-    public float speed = 5f;
-    public float Jumpforce = 5f;
-    public float maxDistance;
-
-    [Header("Vector")]
-    private Vector3 movement;
-    public Vector3 boxSize;
-
-    [Header("References")]
-    public Rigidbody2D rb;
-
-    [Header("Keybinds")]
-    public KeyCode jumpKey;
-
-    [Header("LayerMask")]
-    public LayerMask layerMask;
-
+    private float horizontal;
+    private readonly float speed = 8f;
+    private readonly float jumpingPower = 16f;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
 
     private void Update()
     {
-        AnimationChange();
-        Jump();
+        horizontal = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Space) && rb.velocity.y > 0f)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        }
     }
+
     private void FixedUpdate()
     {
-        Movement();
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);   
     }
 
-    private void Movement()
+    private bool IsGrounded()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        transform.position = transform.position + speed * Time.deltaTime * movement;
-    }
-
-    private void Jump()
-    {
-        if (Input.GetKeyDown(jumpKey) && GroundCheck())
-        {
-            rb.AddForce(new Vector2(0, Jumpforce), ForceMode2D.Impulse);
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(transform.position - transform.up * maxDistance, boxSize);
-    }
-    private bool GroundCheck()
-    {
-        if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, maxDistance, layerMask))
-        {
-            return true;
-        }
-        else return false;
-    }
-
-
-    private void AnimationChange()
-    {
-        if (movement.x <= 0)
-        {
-            //move right
-        }
-        else if (movement.x >= 0)
-        {
-            //move left
-        }
-        else
-        {
-            //idle animation
-        }
-
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 }
