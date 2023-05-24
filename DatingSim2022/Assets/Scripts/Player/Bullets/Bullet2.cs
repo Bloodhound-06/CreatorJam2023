@@ -7,8 +7,8 @@ public class Bullet2 : MonoBehaviour
     public Rigidbody2D rb;
     public float speed;
     public GameObject player;
-    public float damage = 1;
-    public float splashRange = 4;
+    public float damage = 20;
+    public float splashRange = 20;
     private void Start()
     {
         player = GameObject.Find("Players");
