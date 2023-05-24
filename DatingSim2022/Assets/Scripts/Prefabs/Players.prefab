@@ -98,7 +98,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootKey: 323
+  shootKey2: 324
   bullet: {fileID: 7245607515743742547, guid: ea10e47ae4af9834489559c191874da7, type: 3}
+  bullet2: {fileID: 5526925961422385015, guid: 8204a9007d268f3469d110377be4dc16, type: 3}
   BulletStoring: {fileID: 0}
   BulletSpawnPosition: {x: 0, y: 0}
 --- !u!1 &3684118981513707837
